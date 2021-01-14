@@ -1,3 +1,6 @@
+celery==4.4.7
 Flask==1.1.2
 Flask-WTF==0.14.3
+flower==0.9.7
 pytest==6.1.2
+redis==3.5.3

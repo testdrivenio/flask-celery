@@ -14,3 +14,39 @@ services:
     environment:
       - FLASK_DEBUG=1
       - APP_SETTINGS=project.server.config.DevelopmentConfig
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+
+  worker:
+    build: .
+    command: celery worker --app=project.server.tasks.celery --loglevel=info --logfile=project/logs/celery.log
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - FLASK_DEBUG=1
+      - APP_SETTINGS=project.server.config.DevelopmentConfig
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - web
+      - redis
+
+  dashboard:
+    build: .
+    command:  flower --app=project.server.tasks.celery --port=5555 --broker=redis://redis:6379/0
+    ports:
+      - 5556:5555
+    environment:
+      - FLASK_DEBUG=1
+      - APP_SETTINGS=project.server.config.DevelopmentConfig
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - web
+      - redis
+      - worker
+
+  redis:
+    image: redis:6-alpine
