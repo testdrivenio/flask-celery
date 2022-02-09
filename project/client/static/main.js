@@ -13,7 +13,7 @@ function handleClick(type) {
     body: JSON.stringify({ type: type }),
   })
   .then(response => response.json())
-  .then(data => getStatus(data.task_id));
+  .then(res => getStatus(res.data.task_id));
 }
 
 function getStatus(taskID) {
@@ -28,16 +28,16 @@ function getStatus(taskID) {
     const html = `
       <tr>
         <td>${taskID}</td>
-        <td>${res.task_status}</td>
-        <td>${res.task_result}</td>
+        <td>${res.data.task_status}</td>
+        <td>${res.data.task_result}</td>
       </tr>`;
-    const newRow = document.getElementById('tasks').insertRow(0);
+    document.getElementById('tasks').prepend(html);
+    const newRow = document.getElementById('table').insertRow();
     newRow.innerHTML = html;
-
-    const taskStatus = res.task_status;
-    if (taskStatus === 'SUCCESS' || taskStatus === 'FAILURE') return false;
+    const taskStatus = res.data.task_status;
+    if (taskStatus === 'finished' || taskStatus === 'failed') return false;
     setTimeout(function() {
-      getStatus(res.task_id);
+      getStatus(res.data.task_id);
     }, 1000);
   })
   .catch(err => console.log(err));
