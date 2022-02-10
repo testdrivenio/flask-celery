@@ -3,6 +3,7 @@ from unittest.mock import patch, call
 
 from project.server.tasks import create_task
 
+
 def test_home(test_app):
     client = test_app.test_client()
     resp = client.get("/")

@@ -5,6 +5,7 @@ from flask import render_template, Blueprint, jsonify, request
 
 from project.server.tasks import create_task
 
+
 main_blueprint = Blueprint("main", __name__,)
 
 
