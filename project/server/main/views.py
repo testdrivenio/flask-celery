@@ -1,6 +1,5 @@
 # project/server/main/views.py
 
-
 from celery.result import AsyncResult
 from flask import render_template, Blueprint, jsonify, request
 

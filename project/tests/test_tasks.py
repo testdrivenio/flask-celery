@@ -1,6 +1,5 @@
-from unittest.mock import patch, call
-
 import json
+from unittest.mock import patch, call
 
 from project.server.tasks import create_task
 
